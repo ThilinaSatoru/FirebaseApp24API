@@ -11,7 +11,10 @@
         android:theme="@style/Theme.FirebaseApp24API"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.example.firebaseapp24api.Profile"
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
