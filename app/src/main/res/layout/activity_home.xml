@@ -18,10 +18,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottom_navigation"
         app:mbn_circleColor="@color/white"
-        app:mbn_selectedIconColor="#3c4153"
-        app:mbn_countTextColor="#ff6f00"
+        app:mbn_selectedIconColor="@color/icon_background"
+        app:mbn_countTextColor="#000000"
         app:mbn_defaultIconColor="@color/white"
-        app:mbn_backgroundBottomColor="#3c4153"/>
+        app:mbn_backgroundBottomColor="@color/icon_background"/>
 
 
 </LinearLayout>

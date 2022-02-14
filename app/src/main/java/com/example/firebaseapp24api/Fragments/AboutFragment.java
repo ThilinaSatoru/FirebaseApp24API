@@ -7,7 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.firebaseapp24api.Clients.Clients;
+import com.example.firebaseapp24api.Clients.DAOClients;
+import com.example.firebaseapp24api.Products.DAOProducts;
+import com.example.firebaseapp24api.Products.Products;
 import com.example.firebaseapp24api.R;
 
 /**
@@ -57,10 +65,35 @@ public class AboutFragment extends Fragment {
         }
     }
 
+    EditText name,price,gender,material;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+
+        name = view.findViewById(R.id.editTextProdName);
+        price = view.findViewById(R.id.editTextPrice);
+        gender = view.findViewById(R.id.editTextGender);
+        material = view.findViewById(R.id.editTextMaterial);
+
+        ImageButton addBTN = view.findViewById(R.id.imageButtonAddProd);
+        DAOProducts dao = new DAOProducts();
+
+        addBTN.setOnClickListener(v -> {
+
+            Products products = new Products(name.getText().toString() , price.getText().toString() , gender.getText().toString(), material.getText().toString());
+            dao.add(products);
+            dao.add(products).addOnSuccessListener(suc ->
+            {
+                Toast.makeText(getActivity(),"Client Inserted ",Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(er->{
+                Toast.makeText(getActivity(), "Inserted Failed ",Toast.LENGTH_LONG).show();
+            });
+
+        });
+
+        return view;
     }
 }
