@@ -1,4 +1,4 @@
-package com.example.firebaseapp24api;
+package com.example.firebaseapp24api.Clients;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         createRequest();
 
@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this,Profile.class);
+                            Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this,"Login Failed",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this,"Login Failed",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
