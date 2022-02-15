@@ -67,6 +67,7 @@ public class AboutFragment extends Fragment {
 
     EditText name,price,gender,material;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

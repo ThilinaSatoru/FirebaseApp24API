@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void createRequest() {
         // Configure Google Sign In
-        // "1077026419800-5aobdqpf814rdklbgtqui79khhhnq4sm.apps.googleusercontent.com"
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
