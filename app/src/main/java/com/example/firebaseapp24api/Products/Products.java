@@ -5,16 +5,17 @@ public class Products {
     private String price;
     private String Gender;
     private String material;
+    private String imageUrl;
 
     public Products(){}
 
-    public Products(String name, String price, String gender, String material) {
+    public Products(String name, String price, String gender, String material, String imageUrl) {
         this.name = name;
         this.price = price;
-        this.Gender = gender;
+        Gender = gender;
         this.material = material;
+        this.imageUrl = imageUrl;
     }
-
 
     public String getName() {
         return name;
@@ -46,6 +47,14 @@ public class Products {
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
 

@@ -1,7 +1,7 @@
 package com.example.firebaseapp24api;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,11 +14,18 @@ import com.example.firebaseapp24api.Fragments.ProductsFragment;
 public class HomeActivity extends AppCompatActivity {
 
     MeowBottomNavigation bottomNavigation;
+    public static Context contextOfApplication;
+    public static Context getContextOfApplication()
+    {
+
+        return contextOfApplication;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        contextOfApplication = getApplicationContext();
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 

@@ -1,31 +1,38 @@
 package com.example.firebaseapp24api.Fragments;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.firebaseapp24api.Clients.Clients;
-import com.example.firebaseapp24api.Clients.DAOClients;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.firebaseapp24api.HomeActivity;
 import com.example.firebaseapp24api.Products.DAOProducts;
 import com.example.firebaseapp24api.Products.Products;
 import com.example.firebaseapp24api.R;
-import com.google.firebase.FirebaseAppLifecycleListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-
-import java.net.URI;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,13 +82,14 @@ public class AboutFragment extends Fragment {
     }
 
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    FirebaseStorage firebaseStorage;
-    ImageButton imageButton, addBTN;
-    EditText name,price,gender,material;
+    Context applicationContext = HomeActivity.getContextOfApplication();
+    private DatabaseReference root = FirebaseDatabase.getInstance().getReference("Image");
+    private StorageReference reference = FirebaseStorage.getInstance().getReference();
+    ImageView imageButton;
+    ImageButton addBTN;
+    private EditText name,price,gender,material;
     private static final int SELECT_PHOTO = 1;
-    URI imageURI = null;
+    private Uri imageURI;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,40 +105,107 @@ public class AboutFragment extends Fragment {
         imageButton = view.findViewById(R.id.imageAddProduct);
 
 
-
-        DAOProducts dao = new DAOProducts();
-
-        addBTN.setOnClickListener(v -> {
-
-            Products products = new Products(name.getText().toString() , price.getText().toString() , gender.getText().toString(), material.getText().toString());
-            dao.add(products).addOnSuccessListener(suc ->
-            {
-                Toast.makeText(getActivity(),"Client Inserted ",Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(er->{
-                Toast.makeText(getActivity(), "Inserted Failed ",Toast.LENGTH_LONG).show();
-            });
-
-        });
-
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent(
+                    Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                );
                 intent.setType("image/*");
                 startActivityForResult(intent, SELECT_PHOTO);
             }
         });
 
-
+        addBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(imageURI != null){
+                    uploadImage(imageURI);
+                }else{
+                    Toast.makeText(getActivity(), "Please select Image", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return view;
     }
+
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //if (!requestCode == SELECT_PHOTO && requestCode)
+        if (requestCode == SELECT_PHOTO && null != data){
+            imageURI = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getContentResolver().query(imageURI, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            //imageButton.setImageURI(imageURI);
+            imageButton.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+        }
     }
+
+    DAOProducts dao = new DAOProducts();
+    private void uploadImage(Uri uri) {
+        StorageReference fileref = reference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        fileref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Products products = new Products(
+                                name.getText().toString(),
+                                price.getText().toString(),
+                                gender.getText().toString(),
+                                material.getText().toString(),
+                                uri.toString()
+                        );
+                        String productId = root.push().getKey();
+                        root.child(productId).setValue(products);
+                        dao.add(products).addOnSuccessListener(suc ->
+                                Toast.makeText(getActivity(), "Client Inserted", Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private String getFileExtension(Uri mUri){
+        ContentResolver cr = applicationContext.getContentResolver();;
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(mUri));
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
 

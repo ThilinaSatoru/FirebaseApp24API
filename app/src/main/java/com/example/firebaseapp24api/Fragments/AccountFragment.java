@@ -2,27 +2,24 @@ package com.example.firebaseapp24api.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.firebaseapp24api.Clients.Clients;
-import com.example.firebaseapp24api.Clients.DAOClients;
 import com.example.firebaseapp24api.LoginActivity;
 import com.example.firebaseapp24api.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,12 +86,12 @@ public class AccountFragment extends Fragment {
         EditText mobile = view.findViewById(R.id.editTextTextMobile);
         ImageView imgProfilePic = view.findViewById(R.id.imgProfilePic);
 
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
         if(signInAccount!=null){
 
             name.setText(signInAccount.getDisplayName());
             email.setText(signInAccount.getEmail());
-            String personPhotoUrl = signInAccount.getPhotoUrl().toString();
+            String personPhotoUrl = Objects.requireNonNull(signInAccount.getPhotoUrl()).toString();
             Glide.with(getActivity().getApplicationContext()).load(personPhotoUrl)
                     .thumbnail(0.5f)
                     .crossFade()
@@ -105,20 +102,19 @@ public class AccountFragment extends Fragment {
 
 
 
-        ImageButton addBTN = view.findViewById(R.id.imageButtonAdd);
-        DAOClients dao = new DAOClients();
-
-        addBTN.setOnClickListener(v -> {
-
-            Clients clients = new Clients(name.getText().toString() , email.getText().toString() , mobile.getText().toString());
-            dao.add(clients).addOnSuccessListener(suc ->
-            {
-                Toast.makeText(getActivity(),"Client Inserted ",Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(er->{
-                Toast.makeText(getActivity(), "Inserted Failed ",Toast.LENGTH_LONG).show();
-            });
-
-        });
+//        ImageButton addBTN = view.findViewById(R.id.imageButtonAdd);
+//        DAOClients dao = new DAOClients();
+//        addBTN.setOnClickListener(v -> {
+//
+//            Clients clients = new Clients(name.getText().toString() , email.getText().toString() , mobile.getText().toString());
+//            dao.add(clients).addOnSuccessListener(suc ->
+//            {
+//                Toast.makeText(getActivity(),"Client Inserted ",Toast.LENGTH_SHORT).show();
+//            }).addOnFailureListener(er->{
+//                Toast.makeText(getActivity(), "Inserted Failed ",Toast.LENGTH_LONG).show();
+//            });
+//
+//        });
 
         /////////////////////////////////////////////
         view.findViewById(R.id.logout).setOnClickListener(v -> {

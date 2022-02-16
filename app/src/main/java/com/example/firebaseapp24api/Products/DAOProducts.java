@@ -1,6 +1,5 @@
 package com.example.firebaseapp24api.Products;
 
-import com.example.firebaseapp24api.Clients.Clients;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
