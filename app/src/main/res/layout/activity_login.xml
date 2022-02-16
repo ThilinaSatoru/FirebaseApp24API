@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/icon_background"
+    android:background="@color/navigation"
     tools:context=".LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="252dp"
         android:layout_height="245dp"
+        android:background="@drawable/curveborder_bg"
         android:contentDescription="AppIcon"
         app:layout_constraintBottom_toTopOf="@+id/SignInBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,11 +22,11 @@
         app:srcCompat="@drawable/icon_foreground"
         tools:ignore="ImageContrastCheck" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/SignInBtn"
         android:layout_width="314dp"
         android:layout_height="54dp"
-        android:background="@color/white"
+        android:background="@drawable/curveborder_btn"
         android:text="Sign In with Google"
         android:textAlignment="center"
         android:textColor="#020202"

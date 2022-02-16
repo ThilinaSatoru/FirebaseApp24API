@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/curveborder_bg"
     tools:context=".Fragments.AccountFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -27,10 +28,10 @@
         android:layout_height="49dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:backgroundTint="@color/icon_background"
+        android:background="@drawable/curveborder_btn"
         android:text="logout"
+        android:textColor="@color/white"
         android:typeface="normal"
-        app:iconTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +41,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:textAlignment="viewStart"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -56,7 +57,7 @@
         android:layout_height="wrap_content"
         android:text="Email"
         android:textAlignment="viewStart"
-        android:textColor="@color/icon_background"
+        android:textColor="@color/button"
         android:textSize="20sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/view"
@@ -70,7 +71,7 @@
         android:id="@+id/view"
         android:layout_width="411dp"
         android:layout_height="395dp"
-        android:background="@color/icon_background"
+        android:background="@color/element"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -78,19 +79,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/imageButtonAdd"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_marginTop="221dp"
         android:layout_marginBottom="124dp"
-        android:background="@color/black"
+        android:background="@drawable/curveborder_btn"
+        android:text="save"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintTop_toTopOf="@+id/view" />
 
     <EditText
         android:id="@+id/editTextTextMobile"
@@ -100,6 +103,7 @@
         android:layout_marginEnd="48dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/button"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -113,7 +117,7 @@
         android:layout_height="31dp"
         android:layout_marginTop="12dp"
         android:text="Welcome "
-        android:textColor="@color/white"
+        android:textColor="@color/button"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -127,7 +131,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="80dp"
         android:text="Mobile: "
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editTextTextMobile"

@@ -1,13 +1,16 @@
 package com.example.firebaseapp24api.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,12 @@ import com.example.firebaseapp24api.Clients.DAOClients;
 import com.example.firebaseapp24api.Products.DAOProducts;
 import com.example.firebaseapp24api.Products.Products;
 import com.example.firebaseapp24api.R;
+import com.google.firebase.FirebaseAppLifecycleListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+
+import java.net.URI;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,8 +74,14 @@ public class AboutFragment extends Fragment {
         }
     }
 
-    EditText name,price,gender,material;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    FirebaseStorage firebaseStorage;
+    ImageButton imageButton, addBTN;
+    EditText name,price,gender,material;
+    private static final int SELECT_PHOTO = 1;
+    URI imageURI = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,14 +93,16 @@ public class AboutFragment extends Fragment {
         price = view.findViewById(R.id.editTextPrice);
         gender = view.findViewById(R.id.editTextGender);
         material = view.findViewById(R.id.editTextMaterial);
+        addBTN = view.findViewById(R.id.imageButtonAddProd);
+        imageButton = view.findViewById(R.id.imageAddProduct);
 
-        ImageButton addBTN = view.findViewById(R.id.imageButtonAddProd);
+
+
         DAOProducts dao = new DAOProducts();
 
         addBTN.setOnClickListener(v -> {
 
             Products products = new Products(name.getText().toString() , price.getText().toString() , gender.getText().toString(), material.getText().toString());
-            dao.add(products);
             dao.add(products).addOnSuccessListener(suc ->
             {
                 Toast.makeText(getActivity(),"Client Inserted ",Toast.LENGTH_SHORT).show();
@@ -95,6 +112,34 @@ public class AboutFragment extends Fragment {
 
         });
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, SELECT_PHOTO);
+            }
+        });
+
+
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //if (!requestCode == SELECT_PHOTO && requestCode)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

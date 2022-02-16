@@ -111,7 +111,6 @@ public class AccountFragment extends Fragment {
         addBTN.setOnClickListener(v -> {
 
             Clients clients = new Clients(name.getText().toString() , email.getText().toString() , mobile.getText().toString());
-            dao.add(clients);
             dao.add(clients).addOnSuccessListener(suc ->
             {
                 Toast.makeText(getActivity(),"Client Inserted ",Toast.LENGTH_SHORT).show();

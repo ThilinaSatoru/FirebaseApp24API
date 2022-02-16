@@ -10,6 +10,21 @@
         <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseApp24API/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseApp24API/app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseApp24API/app/src/main/res/layout/activity_profile2.xml" value="0.25" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/drawable/curveborder_bg.xml" value="0.1" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/drawable/curveborder_bg_light.xml" value="0.206" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/drawable/curveborder_btn.xml" value="0.206" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/drawable/ic_about.xml" value="0.2595" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/drawable/ic_baseline_add_photo_alternate_24.xml" value="0.2595" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/drawable/layout_borderradius.xml" value="0.2595" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/activity_home.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/activity_login.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/activity_profile2.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/fragment_about.xml" value="0.264" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/fragment_account.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/fragment_products.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/layout_products.xml" value="0.1" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/layout/layout_products2.xml" value="0.1" />
+        <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseAppCRUD/app/src/main/res/mipmap-anydpi-v26/icon.xml" value="0.249" />
         <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseClone/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseClone/app/src/main/res/layout/activity_login.xml" value="0.19429347826086957" />
         <entry key="..\:/Users/Satoru/AndroidStudioProjects/FirebaseClone/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
@@ -27,5 +42,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.15637860082304528" />
+      </ProjectState>
+    </option>
   </component>
 </project>
