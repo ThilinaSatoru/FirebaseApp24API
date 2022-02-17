@@ -99,9 +99,6 @@ public class AccountFragment extends Fragment {
                     .into(imgProfilePic);
         }
         ///////////////////////////////////////
-
-
-
 //        ImageButton addBTN = view.findViewById(R.id.imageButtonAdd);
 //        DAOClients dao = new DAOClients();
 //        addBTN.setOnClickListener(v -> {
@@ -115,7 +112,6 @@ public class AccountFragment extends Fragment {
 //            });
 //
 //        });
-
         /////////////////////////////////////////////
         view.findViewById(R.id.logout).setOnClickListener(v -> {
             mAuth.signOut();

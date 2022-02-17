@@ -1,17 +1,18 @@
 package com.example.firebaseapp24api.Fragments;
 
-import android.content.ContentResolver;
+import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.firebaseapp24api.HomeActivity;
@@ -33,6 +35,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,12 +89,19 @@ public class AboutFragment extends Fragment {
 
     Context applicationContext = HomeActivity.getContextOfApplication();
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference("Image");
-    private StorageReference reference = FirebaseStorage.getInstance().getReference();
+    //private StorageReference reference = FirebaseStorage.getInstance().getReference();
+
+    // instance for firebase storage and StorageReference
+    FirebaseStorage firebaseStorage ;
+    // Create a storage reference from our app
+    StorageReference storageReference;
+
     ImageView imageButton;
     ImageButton addBTN;
     private EditText name,price,gender,material;
-    private static final int SELECT_PHOTO = 1;
-    private Uri imageURI;
+    static final int SELECT_PHOTO = 1;
+    Uri imageURI;
+    String Document_img1 = "https://source.unsplash.com/user/c_v_r/1900x800";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,6 +109,7 @@ public class AboutFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
+        //layouts
         name = view.findViewById(R.id.editTextProdName);
         price = view.findViewById(R.id.editTextPrice);
         gender = view.findViewById(R.id.editTextGender);
@@ -105,64 +118,69 @@ public class AboutFragment extends Fragment {
         imageButton = view.findViewById(R.id.imageAddProduct);
 
 
+        // select image from gallery
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(
-                    Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                );
-                intent.setType("image/*");
-                startActivityForResult(intent, SELECT_PHOTO);
+                if(ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                {
+                    requestPermissions(
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2000);
+                }
+                else {
+                    startGallery();
+                }
             }
         });
 
         addBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(imageURI != null){
-                    uploadImage(imageURI);
-                }else{
-                    Toast.makeText(getActivity(), "Please select Image", Toast.LENGTH_SHORT).show();
-                }
+                uploadImage();
             }
         });
         return view;
     }
 
-
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super method removed
+        if(resultCode == Activity.RESULT_OK) {
+            if(requestCode == 1000){
+                Uri returnUri = data.getData();
+                Bitmap bitmapImage = null;
+                try {
+                    bitmapImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), returnUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imageButton.setImageBitmap(bitmapImage);
+            }
+        }
+        imageURI = data.getData();
+    }
 
-        if (requestCode == SELECT_PHOTO && null != data){
-            imageURI = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-            Cursor cursor = getActivity().getContentResolver().query(imageURI, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            //imageButton.setImageURI(imageURI);
-            imageButton.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
+    private void startGallery() {
+        Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        cameraIntent.setType("image/*");
+        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(cameraIntent, 1000);
         }
     }
 
+
     DAOProducts dao = new DAOProducts();
     private void uploadImage(Uri uri) {
-        StorageReference fileref = reference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        StorageReference fileref = storageReference.child(System.currentTimeMillis() + ".");
         fileref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 fileref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+
+                        Document_img1 = uri.toString();
                         Products products = new Products(
                                 name.getText().toString(),
                                 price.getText().toString(),
@@ -190,13 +208,76 @@ public class AboutFragment extends Fragment {
         });
     }
 
+    // UploadImage method
 
-    private String getFileExtension(Uri mUri){
-        ContentResolver cr = applicationContext.getContentResolver();;
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cr.getType(mUri));
+    private void uploadImage()
+    {
+        if (imageURI != null) {
+
+            // Code for showing progressDialog while uploading
+            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            // Defining the child of storageReference
+            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(imageURI)
+                    .addOnSuccessListener(
+                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onSuccess(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {
+
+                                    // Image uploaded successfully
+                                    // Dismiss dialog
+                                    progressDialog.dismiss();
+                                    Toast
+                                            .makeText(getActivity(),
+                                                    "Image Uploaded!!",
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                            // Error, Image not uploaded
+                            progressDialog.dismiss();
+                            Toast
+                                    .makeText(getActivity(),
+                                            "Failed " + e.getMessage(),
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    })
+                    .addOnProgressListener(
+                            new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                                // Progress Listener for loading
+                                // percentage on the dialog box
+                                @Override
+                                public void onProgress(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {
+                                    double progress
+                                            = (100.0
+                                            * taskSnapshot.getBytesTransferred()
+                                            / taskSnapshot.getTotalByteCount());
+                                    progressDialog.setMessage(
+                                            "Uploaded "
+                                                    + (int)progress + "%");
+                                }
+                            });
+        }
     }
-
 
 
 

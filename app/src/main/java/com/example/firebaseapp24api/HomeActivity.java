@@ -53,7 +53,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         //notifications
-        bottomNavigation.setCount(1,"5");
+        //bottomNavigation.setCount(1,"5");
+
         //
         bottomNavigation.show(2,true);
 

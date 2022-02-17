@@ -37,8 +37,10 @@ public class RVadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ProductsVH vh = (ProductsVH) holder;
         Products prod = list.get(position);
+        //vh.image.setImageBitmap(prod.getImageUrl());
         vh.txt_name.setText(prod.getName());
         vh.txt_price.setText(prod.getPrice());
+        vh.txt_material.setText(prod.getMaterial());
 
     }
 
